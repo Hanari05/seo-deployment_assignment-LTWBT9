@@ -10,7 +10,7 @@ const shareImage = {
   url: "/og-image.png",
   width: 1200,
   height: 630,
-  alt: "Hana — Nhà là nơi mình thấy yên"
+  alt: "Hana — Nhà là nơi mình muốn về"
 };
 
 export const metadata = {

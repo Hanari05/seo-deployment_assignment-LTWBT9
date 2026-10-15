@@ -132,3 +132,86 @@ Nếu backend Render đang khởi động lại sau thời gian không hoạt đ
 3. Trong mô tả PR, chỉ cung cấp **mã số sinh viên và họ tên**.
 4. Trong mục **About của repository GitHub đã fork** (bấm biểu tượng bánh răng), đặt **URL frontend** ở trường **Website**, đặt **URL backend** ở **Description** với nhãn `Backend:`. Dùng URL HTTPS công khai để nhóm mở website và gọi `/api/health`, `/api/products` kiểm tra API.
 5. Dán link PR để nộp bài. **Giữ PR mở và website hoạt động tới khi có điểm; không đóng và không tự bấm Merge PR.**
+
+
+---
+
+# Báo cáo quá trình thực hiện
+
+Phần này ghi lại toàn bộ quá trình hoàn thành bài tập, từ code đến deploy, cho cửa hàng nội thất **Hana**.
+
+## 1. Chuẩn bị
+
+- Giải nén mã nguồn, đọc README và code gốc: backend Express 5 (`/api/health`, `/api/products` trả 6 sản phẩm mock) và frontend Next.js 16 (App Router) lấy sản phẩm từ `API_BASE_URL`.
+- Fork repo về tài khoản cá nhân, tạo nhánh làm bài `lam-bai`.
+- Chạy thử local: backend `http://localhost:5000`, frontend `http://localhost:3000` (file `frontend/.env.local` không được commit).
+
+## 2. Cấu hình SEO (thư mục `frontend/app`)
+
+| File | Nội dung |
+| --- | --- |
+| `layout.js` | Dùng **Next.js Metadata API**: `title`, `description` về cửa hàng Hana, `metadataBase` lấy từ `SITE_URL`, canonical `/`, Open Graph (`type`, `url`, `siteName`, `locale: vi_VN`, ảnh 1200×630), Twitter Card `summary_large_image`. Giữ `lang="vi"`. |
+| `robots.js` | Cho phép thu thập (`Allow: /`), khai báo `Sitemap` theo `SITE_URL`. |
+| `sitemap.js` | Khai báo URL trang chủ theo `SITE_URL`. |
+| `public/og-image.png` | Ảnh chia sẻ 1200×630 (PNG) truy cập công khai. |
+| `page.js` | Đổi thương hiệu Nest thành Hana (logo, menu, alt ảnh, phần giới thiệu). Vẫn một thẻ H1 và mọi ảnh đều có alt. |
+
+`SITE_URL` được đọc từ biến môi trường, không hard-code URL, nên khi deploy chỉ cần đặt biến là metadata, robots và sitemap tự dùng URL production.
+
+## 3. Đổi giao diện
+
+Giao diện gốc (xanh rêu và kem) được đổi sang phong cách **hồng pastel, xanh pastel và trắng**:
+
+- Đổi bảng màu trong `globals.css` (nền trắng hồng `#fffafc`, chữ xanh tím đậm `#3a3956`, nhấn hồng `#c84e80`, thanh thông báo xanh `#cfe3f6`).
+- Bo góc lớn cho ảnh hero, thẻ sản phẩm, nút (dạng viên thuốc) và khối giới thiệu; thẻ sản phẩm có viền hồng nhạt và đổ bóng khi rê chuột.
+- Vẽ lại 3 ảnh SVG (`chair`, `lamp`, `vase`) theo tông pastel; nền sản phẩm xoay vòng hồng, xanh dương nhạt, xanh bạc hà.
+- Giữ nguyên cấu trúc HTML và class, nên không ảnh hưởng đến SEO hay việc lấy dữ liệu từ API.
+
+## 4. Kiểm tra local
+
+1. `cd frontend && npm run build` không có lỗi.
+2. Chạy backend và `npm start`, mở View Source: có đủ title, description, canonical, `og:*`, `twitter:*`.
+3. `/robots.txt` và `/sitemap.xml` trả về đúng URL theo `SITE_URL`; trang hiển thị 6 sản phẩm.
+
+## 5. Deploy backend lên Render
+
+1. Push nhánh `lam-bai` lên fork, đăng nhập Render bằng GitHub.
+2. New, chọn Web Service, chọn repo đã fork.
+3. Cấu hình: Branch `lam-bai`, Root Directory `backend`, Build Command `npm ci`, Start Command `npm start`, Instance Type Free. Không cần biến môi trường vì Render cấp `PORT`.
+4. Kết quả: `https://hana-api-seo-deployment-ltwbt9.onrender.com`. `GET /api/health` trả `{"status":"ok"}`, `GET /api/products` trả 6 sản phẩm.
+
+Lưu ý: gói Free của Render sẽ "ngủ" khi không có truy cập, nên mở `/api/health` để đánh thức trước khi mở frontend.
+
+## 6. Deploy frontend lên Vercel
+
+1. Import repo đã fork, Root Directory `frontend`, Framework Preset Next.js.
+2. Thêm biến `API_BASE_URL` = URL backend Render (không có `/` cuối, không kèm `/api/products`).
+3. Deploy lần đầu để có URL production: `https://seo-deployment-assignment-ltwbt-9.vercel.app`.
+4. Thêm biến `SITE_URL` bằng URL production này (môi trường Production).
+5. **Settings, Environments, Production, Branch Tracking**: đổi Production Branch sang `lam-bai`.
+6. Push một commit lên `lam-bai` để Vercel build lại từ nhánh làm bài với đúng biến môi trường.
+
+### Vấn đề gặp phải và cách xử lý
+
+- **Không đổi được Production Branch** (báo "No deployments found for lam-bai"): Vercel chỉ cho chọn nhánh đã có deployment. Cách xử lý là push nhánh `lam-bai` lên GitHub và đợi Vercel build nhánh này rồi mới đổi.
+- **Nút Redeploy vẫn dùng nhánh `main`**: Redeploy chỉ build lại cùng mã nguồn của deployment cũ, nên muốn deploy code mới phải push commit lên nhánh Production.
+- **Trang vẫn hiện logo "nest"**: đó là bản build từ `main` cũ. Sau khi build từ `lam-bai` thì trang hiển thị thương hiệu Hana.
+
+## 7. Kiểm tra sau deploy
+
+- Mở URL frontend bằng cửa sổ ẩn danh: truy cập được qua HTTPS, hiển thị đủ 6 sản phẩm và ảnh; tab hiển thị title "Hana — Nội thất, đèn bàn...".
+- View Page Source: metadata, canonical, Open Graph, Twitter Card dùng URL production, không còn `localhost`.
+- Mở `/robots.txt`, `/sitemap.xml`, `/og-image.png`.
+- Chạy Lighthouse (mục SEO) trên Chrome DevTools để tự đánh giá.
+
+## 8. Nộp bài
+
+1. `git add frontend`, `git commit -m "Hoan thanh bai tap SEO va Deployment"`, `git push -u origin lam-bai`.
+2. Mở Pull Request từ `lam-bai` (fork) vào `main` của `LuckSnow/seo-deployment_assignment`. Mô tả PR chỉ gồm mã số sinh viên và họ tên.
+3. Ở About của repo fork: Website là URL frontend, Description là `Backend: <URL backend>`.
+4. Giữ PR mở và website hoạt động đến khi có điểm; không tự merge, không đóng PR.
+
+## Địa chỉ
+
+- Frontend: https://seo-deployment-assignment-ltwbt-9.vercel.app
+- Backend: https://hana-api-seo-deployment-ltwbt9.onrender.com

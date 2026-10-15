@@ -29,7 +29,7 @@ export default async function Home() {
     <main>
       <section className="hero wrap">
         <div className="hero-copy"><p className="eyebrow">THE EVERYDAY COLLECTION / 01</p>
-          <h1>Nhà là nơi<br />mình <em>thấy yên.</em></h1>
+          <h1>Nhà là nơi<br />mình <em>muốn về</em>.</h1>
           <p>Những món đồ giản đơn, sắc màu dịu nhẹ. Thêm một chút cảm hứng cho từng góc nhỏ thân quen.</p>
           <a className="button" href="#products">Khám phá bộ sưu tập <span aria-hidden="true">↗</span></a>
           <p className="hero-caption">NỘI THẤT · ÁNH SÁNG · TRANG TRÍ</p>
