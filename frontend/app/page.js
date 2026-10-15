@@ -22,8 +22,8 @@ export default async function Home() {
   return <>
     <div className="announcement">Một chút tinh giản. Một tổ ấm của riêng bạn.</div>
     <header className="header wrap">
-      <a className="brand" href="/" aria-label="Nest — Trang chủ">nest<span>®</span></a>
-      <nav aria-label="Điều hướng chính"><a href="#products">Bộ sưu tập</a><a href="#about">Về Nest</a></nav>
+      <a className="brand" href="/" aria-label="Hana — Trang chủ">hana<span>®</span></a>
+      <nav aria-label="Điều hướng chính"><a href="#products">Bộ sưu tập</a><a href="#about">Về Hana</a></nav>
       <span className="header-note">ĐỒ ĐẸP CHO NHÀ</span>
     </header>
     <main>
@@ -34,7 +34,7 @@ export default async function Home() {
           <a className="button" href="#products">Khám phá bộ sưu tập <span aria-hidden="true">↗</span></a>
           <p className="hero-caption">NỘI THẤT · ÁNH SÁNG · TRANG TRÍ</p>
         </div>
-        <div className="hero-art"><div className="arch" /><img src="/images/chair.svg" alt="Minh họa ghế gỗ trong bộ sưu tập Nest" width="400" height="400" /><span className="art-label">Ít hơn, nhưng đủ đầy.</span><span className="art-number">01 — 06</span></div>
+        <div className="hero-art"><div className="arch" /><img src="/images/chair.svg" alt="Minh họa ghế gỗ trong bộ sưu tập Hana" width="400" height="400" /><span className="art-label">Ít hơn, nhưng đủ đầy.</span><span className="art-number">01 — 06</span></div>
       </section>
       <section className="catalog wrap" id="products">
         <div className="section-heading"><div><p className="eyebrow">CHỌN MỘT CHÚT AN YÊN</p><h2>Cho góc nhà của bạn</h2></div><span>{products ? `${products.length} sản phẩm` : "Bộ sưu tập"}</span></div>
@@ -43,8 +43,8 @@ export default async function Home() {
           <p className="category">{product.category}</p><div className="product-title"><h3>{product.name}</h3><span>{currency.format(product.price)}</span></div><p className="description">{product.description}</p>
         </article>)}</div>}
       </section>
-      <section className="about wrap" id="about"><p className="eyebrow">CHUYỆN CỦA NEST</p><h2>Để mỗi ngày về nhà<br />là một niềm vui nhỏ.</h2><p>Nest là cửa hàng nội thất giả lập dành cho bài tập SEO & Deployment. Sản phẩm, giá bán và hình minh họa đều là dữ liệu mẫu; website không nhận đơn hàng.</p></section>
+      <section className="about wrap" id="about"><p className="eyebrow">CHUYỆN CỦA HANA</p><h2>Để mỗi ngày về nhà<br />là một niềm vui nhỏ.</h2><p>Hana là cửa hàng nội thất giả lập dành cho bài tập SEO & Deployment. Sản phẩm, giá bán và hình minh họa đều là dữ liệu mẫu; website không nhận đơn hàng.</p></section>
     </main>
-    <footer className="wrap"><a className="brand" href="/">nest<span>®</span></a><p>E-commerce demo · SEO & Deployment Assignment</p><a href="#products">Về bộ sưu tập ↑</a></footer>
+    <footer className="wrap"><a className="brand" href="/">hana<span>®</span></a><p>E-commerce demo · SEO & Deployment Assignment</p><a href="#products">Về bộ sưu tập ↑</a></footer>
   </>;
 }
